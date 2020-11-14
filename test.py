@@ -7,33 +7,27 @@ from responsive_voice.voices import UKEnglishMale
 from inference import FaceDetection, MaskDetection
 from pyvino_utils import InputFeeder
 import cv2
-from openvino.inference_engine.ie_api import IECore
+
 
 
 def main():
-    ie=IECore()
+    
     # Initialise the video stream
     input_feed = InputFeeder(input_feed='cam')
     # Initialise the speech output
     green=(0,255,0)
-
-    net = ie.read_network(model='./models/face-detection-adas-0001.xml', weights='./models/face-detection-adas-0001.bin')
-    exec_net = ie.load_network(network=net, device_name="CPU", num_requests=2)
-
     face_detection = FaceDetection(
         model_name='./models/face-detection-adas-0001',
-        device=exec_net,
+        device='CPU',
         threshold=0.60,
         input_feed=input_feed,
     )
-    net = ie.read_network(model='./models/face_mask.xml', weights='./models/face_mask.bin')
-    exec_net = ie.load_network(network=net, device_name="CPU", num_requests=2)
-
     mask_detection = MaskDetection(
         model_name='./models/face_mask',
-        device=exec_net,
+        device='CPU',
         threshold=0.30,
     )
+
     
     mask_detected_prob = -1
     try:

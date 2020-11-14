@@ -42,6 +42,7 @@ class FaceDetection(Base):
             raise RuntimeError("Initial image width and height cannot be None.")
         if len(inference_results) == 1:
             inference_results = inference_results[0]
+
         bbox_coord = []
         for box in inference_results[0][0]:  # Output shape is 1x1xNx7
             conf = box[2]
@@ -85,7 +86,6 @@ class FaceDetection(Base):
         cv2.rectangle(
             image, (xmin, ymin), (xmax, ymax,), color=label[1], thickness=thickness,
         )
-        
         ((label_width, label_height), _) = cv2.getTextSize(
             label[0], cv2.FONT_HERSHEY_PLAIN, fontScale=scale, thickness=thickness,
         )
